@@ -12,15 +12,44 @@
 **第一题：实现存证模块的功能，包括：**
 
 * 创建存证，可调用函数所接收参数为内容的哈希值 Vec<u8>；
+![createClaim1](./images/createClaim1.png)
+![createClaim2](./images/createClaim2.png)
+![createClaim3](./images/createClaim3.png)
+![createClaim4](./images/createClaim4.png)
 * 撤销存证，可调用函数所接收参数为内容的哈希值 Vec<u8>。
+![revokeClaim1](./images/revokeClaim1.png)
+![revokeClaim2](./images/revokeClaim2.png)
+![revokeClaim3](./images/revokeClaim3.png)
+![revokeClaim4](./images/revokeClaim4.png)
 
 **第二题：为存证模块添加新的功能，**
 
 * 转移存证，接收两个参数，一个是内容的哈希值，另一个是存证的接收账户地址；当存证不存在或者发送请求的用户不是存证内容的拥有人时，返回错误；当所有的检查通过后，更新对应的存证记录，并触发一个事件。
 
+**存证不存在**
+![transferClaim1](./images/transferClaim1.png)
+
+**非拥有者**
+![transferClaim2](./images/transferClaim2.png)
+
+**不能转移给自己**
+![transferClaim3](./images/transferClaim3.png)
+
+**转移成功**
+![transferClaim4](./images/transferClaim4.png)
+
 **第三题（附加题）：**
 
 * 创建存证时，为存证内容的哈希值设置界限，如果超出界限，返回错误。
+
+**创建存证，小于下限**
+![createClaim5](./images/createClaim5.png)
+
+**创建存证，大于上限**
+![createClaim6](./images/createClaim6.png)
+
+**创建存证，符合界限**
+![createClaim7](./images/createClaim7.png)
 
 ### 参考资料
 
