@@ -29,21 +29,25 @@ function Main (props) {
     return () => unsubscribe && unsubscribe();
   }, [digest, api.query.poeModule]);
 
-  const bufferToDigest = () => {
-    const content = Array.from(new Uint8Array(fileReader.result))
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('');
-
-      const hash = blake2AsHex(content, 256);
-      setDigest(hash);
-  }
-
   const handleFileChoose = (file) => {
     const fileReader = new FileReader();
+
+    const bufferToDigest = () => {
+      const content = Array.from(new Uint8Array(fileReader.result))
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('');
+  
+        const hash = blake2AsHex(content, 256);
+        setDigest(hash);
+    }
 
     fileReader.onloadend = bufferToDigest;
 
     fileReader.readAsArrayBuffer(file);
+  }
+
+  const onReceiverChange = (_, data) => {
+    setReceiver(data.value);
   }
 
   return (
@@ -52,19 +56,28 @@ function Main (props) {
       <Form>
         <Form.Field>
           <Input
-            type="file"
-            id="file"
-            lable="Your File"
+            type='file'
+            id='file'
+            lable='Your File'
             onChange={ (e) => handleFileChoose(e.target.files[0]) }
           />
         </Form.Field>
+        <Form.Field>
+          <Input
+            type='text'
+            label='To'
+            placeholder='Address'
+            state='receiver'
+            onChange={ onReceiverChange }
+          />
+        </Form.Field>
 
-        <Form.field>
+        <Form.Field>
           <TxButton
             accountPair={accountPair}
-            label="Create Claim"
+            label='Create Claim'
             setStatus={setStatus}
-            type="SIGNED-TX"
+            type='SIGNED-TX'
             attrs={{
               palletRpc: 'poeModule',
               callable: 'createClaim',
@@ -75,9 +88,9 @@ function Main (props) {
 
           <TxButton
             accountPair={accountPair}
-            label="Remove Claim"
+            label='Remove Claim'
             setStatus={setStatus}
-            type="SIGNED-TX"
+            type='SIGNED-TX'
             attrs={{
               palletRpc: 'poeModule',
               callable: 'revokeClaim',
@@ -88,17 +101,17 @@ function Main (props) {
 
           <TxButton
             accountPair={accountPair}
-            label="Transfer Claim"
+            label='Transfer Claim'
             setStatus={setStatus}
-            type="SIGNED-TX"
+            type='SIGNED-TX'
             attrs={{
               palletRpc: 'poeModule',
               callable: 'transferClaim',
-              inputParams: [digest],
+              inputParams: [digest, receiver],
               paramFields: [true]
             }}
           />
-        </Form.field>
+        </Form.Field>
 
           <div>{status}</div>
           <div>{`Claim info, owner: ${owner}, blockNumber: ${blockNumber}`}</div>
@@ -109,6 +122,6 @@ function Main (props) {
 
 export default function PoeModule (props) {
   const { api } = useSubstrate();
-  return (api.query.poeModule && api.query.poeModule.something
+  return (api.query.poeModule && api.query.poeModule.proofs
     ? <Main {...props} /> : null);
 }
