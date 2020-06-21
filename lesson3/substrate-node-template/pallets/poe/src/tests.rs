@@ -102,3 +102,7 @@ fn transfer_claim_failed_with_wrong_owner() {
         assert_noop!(PoeModule::transfer_claim(Origin::signed(2), claim.clone(), 2), Error::<Test>::NotClaimOwner);
     })
 }
+
+use crate::{Error, mock::*};
+use frame_support::{assert_ok, assert_noop};
+

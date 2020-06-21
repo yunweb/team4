@@ -25,6 +25,7 @@
 * 转移存证的UI
 ![transferClaim](./images/transferClaim.png)
 
+
 第三题（附加题）：实现购买存证的功能代码：
 
 * 用户A为自己的某个存证记录设置价格；
