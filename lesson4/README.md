@@ -16,6 +16,9 @@ function submitDocInfo(filePath, comment) {
 }
 ```
 
+![createClaimWithNote](./images/create_note.png)
+![note](./images/note.png)
+
 附加题：这一题需要改动 前端 **及 Substrate 节点** 的代码。现在也加一个功能，允许前端输入一个 AccountID，遍历显示属于该用户的文件 hash, 其创建日期，及其备注
 
 用 node.js 的话，则是写一个类似函数：
