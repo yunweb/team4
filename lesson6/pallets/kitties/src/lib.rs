@@ -72,6 +72,13 @@ decl_module! {
 		#[weight = 0]
 		pub fn transfer(origin, to: T::AccountId, kitty_id: T::KittyIndex) {
 			// 作业
+			let sender = ensure_signed(origin)?;
+
+			let key = (&sender, Some(kitty_id));
+			ensure!(OwnedKitties::<T>::get(key).is_some(), Error::<T>::RequireOwner);
+
+			OwnedKitties::<T>::remove(&sender, &kitty_id);
+			OwnedKitties::<T>::append(&to, &kitty_id);
 		}
 	}
 }
@@ -86,7 +93,7 @@ impl<T: Trait> OwnedKitties<T> {
 	}
 
 	fn read(account: &T::AccountId, key: Option<T::KittyIndex>) -> KittyLinkedItem<T> {
-		<OwnedKitties<T>>::get((&account, key)).unwrap_or_else(|| KittyLinkedItem {
+		<OwnedKitties<T>>::get().unwrap_or_else(|| KittyLinkedItem {
 			prev: None,
 			next: None,
 		})
@@ -120,7 +127,7 @@ impl<T: Trait> OwnedKitties<T> {
 	}
 
 	pub fn remove(account: &T::AccountId, kitty_id: T::KittyIndex) {
-		if let Some(item) = <OwnedKitties<T>>::take((&account, Some(kitty_id))) {
+		if let Some(item) = <OwnedKitties<T>>::take() {
 			let prev = Self::read(account, item.prev);
 			let new_prev = KittyLinkedItem {
 				prev: prev.prev,
@@ -164,6 +171,7 @@ impl<T: Trait> Module<T> {
 
 	fn insert_owned_kitty(owner: &T::AccountId, kitty_id: T::KittyIndex) {
 		// 作业
+		OwnedKitties::<T>::insert(owner, kitty_id);
 	}
 
 	fn insert_kitty(owner: &T::AccountId, kitty_id: T::KittyIndex, kitty: Kitty) {
